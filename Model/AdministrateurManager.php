@@ -1,6 +1,6 @@
 <?php
 
-require_once('camping/Model/Manager.php');
+require_once('la_vallee_des_croisees/Model/Manager.php');
 
 class AdministrateurManager extends Manager {
 

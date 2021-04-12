@@ -19,7 +19,7 @@
     liste des reservation
     liste des prix_spéciaux par chalet par semaine
 */
-include 'Connexion_Gaetan.php';
+include '../ConnexionBDD.php';
 
 function ajout_admin($login,$mdp) //testé (vérifié les log existant)
 {
@@ -90,7 +90,7 @@ function suppr_client($mail) //testé
     $effet->execute(array($mail));
 }
 
-ajout_client("Najare", "Aya", "2001-01-01", "fun@prout.com", '0107080905', "572 avenue du mal à la tête", "59126", "rose", "Joie");
+//ajout_client("Najare", "Aya", "2001-01-01", "fun@prout.com", '0107080905', "572 avenue du mal à la tête", "59126", "rose", "Joie");
 
 ?>
 

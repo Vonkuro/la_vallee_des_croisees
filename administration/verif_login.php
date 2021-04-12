@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'Connexion_Gaetan.php';
+include '../ConnexionBDD.php';
 function verification($user, $pwd)
 {
     global $conn;

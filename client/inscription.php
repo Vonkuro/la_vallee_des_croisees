@@ -1,51 +1,108 @@
 <?php
 require('fonctions.php');
 
-
-
-
 #si tous les champs sont initialisés
-if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['date']) && isset($_POST['mail']) && isset($_POST['telephone']) && isset($_POST['adresse']) && isset($_POST['cp']) && isset($_POST['mdp']) && isset($_POST['mdp2']) && isset($_POST['ville'])) {
-	#si tous les champs obligatoires contiennent une valeur
-	if (!empty($_POST['nom']) && !empty($_POST['prenom']) && !empty($_POST['date']) && !empty($_POST['mail']) && !empty($_POST['cp']) && !empty($_POST['mdp']) && !empty($_POST['mdp2']) && !empty($_POST['ville'])) {
-		#si tous les mots de passe tapés sont les memes
-		if ($_POST['mdp']==$_POST['mdp2']) {
-			#bonne taille des String
-			if (strlen($_POST['mail'])<=150 && strlen($_POST['telephone'])<=50 && strlen($_POST['cp'])<=50 && strlen($_POST['mdp'])<=30 && strlen($_POST['ville'])<=58) {
-				#si la date est conforme
-				if (verifDate($_POST['date'])) {
-					#Verifie l'âge minimal
-					if (verifAge($_POST['date'])) {
-							#bon format du mail
-						if (filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
-							if (!nonUniqueMail($_POST['mail'])) {
-								$message = ajoutClient($_POST['nom'],$_POST['prenom'],$_POST['date'],$_POST['mail'],$_POST['telephone'],$_POST['adresse'],$_POST['cp'],$_POST['mdp'],$_POST['ville']);
-							} else {
-								$message = 'Adresse mail déja utilisé';
-							}
-						} else {
-							$message = "Mail invalide";
-						}
-					} else {
-						$message = "Age erroné (16 ans minimum)";
-					}
-				} else {
-					$message ="Date erronée";	
-				}
-			} else {
-				$message = "Probleme de taille d'un des champs";
-			}
-		} else {
-			$message = "Les deux mots de passe ne sont pas identiques";
-		}
-	} else {
-		$message = "Un ou plusieurs champs obligatoires sont vides";
-	}
+if (isset($_POST['nom']) && !empty($_POST['nom'])) {
+	$nom=$_POST['nom'];
+} else {
+	die("le nom est obligatoire");
 }
 
+if (isset($_POST['prenom']) && !empty($_POST['prenom'])) {
+	$prenom=$_POST['prenom'];
+} else {
+	die("le prenom est obligatoire");
+}
+
+if (isset($_POST['date']) &&  !empty($_POST['date'])) {
+	if (verifDate($_POST['date'])) {
+		if (verifAge($_POST['date'])) {
+			$date=$_POST['date'];
+		} else {
+			die("l'âge minimal pour s'inscrire est de 16 ans");
+		}
+	} else {
+		die("la date n'est pas valide");
+	}
+} else {
+	die("la date est obligatoire");
+}
+
+if (isset($_POST['mail']) && !empty($_POST['mail'])) {
+	if (strlen($_POST['mail'])<=150 {
+		if (filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
+			if (!nonUniqueMail($_POST['mail'])) {
+				$mail=$_POST['mail'];
+			} else {
+				die("ce mail est déjà utilisé");
+			}
+		} else {
+			die("mauvais format du mail");
+		}
+	} else {
+		die("le mail est trop grand, taille invalide");
+	}
+} else {
+	die("le mail est obligatoire");
+}
+
+if (isset($_POST['telephone'])) {
+	if (strlen($_POST['telephone'])<=50) {
+		$telephone=$_POST['telephone'];
+	} else {
+		die("le telephone est trop grand, taille invalide");
+	}
+} else {
+	die("telephone non initialisé");
+}
+
+if (isset($_POST['adresse'])) {
+	$adresse=$_POST['adresse'];
+} else {
+	die("adresse non initialisé");
+}
+
+if (isset($_POST['cp']) && !empty($_POST['cp'])) {
+	if (strlen($_POST['cp'])<=50) {
+		$cp=$_POST['cp'];
+	} else {
+		die("le code postal est trop grand, taille invalide");
+	}
+} else {
+	die("le code postal est obligatoire");
+}
+
+if (isset($_POST['mdp']) && !empty($_POST['mdp']) && isset($_POST['mdp2']) && !empty($_POST['mdp2'])) {
+	if ($_POST['mdp']==$_POST['mdp2']) { 
+		if (strlen($_POST['mdp'])<=30) {
+			$mdp=$_POST['mdp'];
+		} else {
+			die("le mot de passe est trop grand, taille invalide");
+		}
+	} else {
+		die("le mot de passe ne correspond pas au mot de passe retapé");
+	}
+} else {
+	die("le mot de passe est obligatoire");
+}
+
+if (isset($_POST['ville']) && !empty($_POST['ville'])) {  
+	if (strlen($_POST['ville'])<=58)) {
+		$ville=$_POST['ville'];
+	} else {
+		die("la longueur du champ ville est trop grande, taille invalide");
+	}
+} else {
+	die("la ville est obligatoire");
+}
+
+$message = ajoutClient($nom, $prenom, $date, $mail, $telephone, $adresse, $cp, $mdp, $ville);
+
 ?>
-<html>
+
 	<!-- PARTIE HTML -->
+<html>
+
 <head>
 	
 </head>

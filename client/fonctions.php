@@ -2,9 +2,9 @@
 
 function ajoutClient($nom,$prenom,$date_naissance,$mail,$telephone,$adresse,$cp_ville,$mdp_client,$ville) {
 		include('./connexionBDD_Denis.php');
-		$sql = "INSERT INTO Client (nom, prenom, date_naissance, mail, telephone, adresse, cp_ville, mdp_client, ville) VALUES (:nom, :prenom, :date_naissance, :mail, :telephone, :adresse, :cp_ville, :mdp_client, :ville)";
+		$sql = "INSERT INTO Client (nom, prenom, date_naissance, mail, telephone, adresse, cp_ville, mdp_client, ville) VALUES (?,?,?,?,?,?,?,?,?)";
 		$resultat = $conn->prepare($sql);
-		$resultat->execute(array('nom' => $nom, 'prenom' => $prenom, 'date_naissance' => $date_naissance, 'mail' => $mail, 'telephone' => $telephone, 'adresse' => $adresse, 'cp_ville' => $cp_ville, '$mdp_client' => $mdp_client, 'ville' => $ville));
+		$resultat->execute(array($nom, $prenom, $date_naissance, $mail, $telephone, $adresse, $cp_ville, $mdp_client,$ville));
 		if ($resultat==FALSE) {
 			echo "probleme de la requete sql";
 		} else {
@@ -12,6 +12,14 @@ function ajoutClient($nom,$prenom,$date_naissance,$mail,$telephone,$adresse,$cp_
 			return $message;
 		}
 	}
+
+function nonUniqueMail($mail) {
+	include('./connexionBDD_Denis.php');
+	$sql = "SELECT * FROM Client WHERE mail=?";
+	$resultat=$conn->prepare($sql);
+	$resultat->execute(array($mail));
+	return $resultat;
+}
 
 function verifDate($date) {
 	$dateTab=explode('-',$date);
@@ -28,4 +36,17 @@ function verifAge($date) {
 	$age=date_diff($today,$dateFormat);
 	return intval($age->format('%y'))>=16;
 }
+
+function ajoutReservation($idClient, $idChalet, $idSemaine) {
+	include('./connexionBDD_Denis.php');
+	$sql = "INSERT INTO Reservation (id_client, id_chalet, id_semaine, valide, date_reservation) VALUES (:id_client, :id_chalet, :id_semaine, :valide, :date_reservation)";
+	$resultat=$conn->prepare($sql);
+	$resultat->execute(array('idclient' => $idClient, 'id_chalet' => $idChalet, 'id_semaine' => $idSemaine, 'valide' => 'false', 'date_reservation' => date("Y-m-d")));
+	if ($resultat==FALSE) {
+		echo "probleme de la requete sql";
+	} else {
+		echo "La réservation a été ajoutée";
+	}
+}
+
 

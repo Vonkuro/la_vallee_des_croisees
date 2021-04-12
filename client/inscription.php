@@ -1,6 +1,9 @@
 <?php
 require('fonctions.php');
 
+
+
+
 #si tous les champs sont initialisés
 if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['date']) && isset($_POST['mail']) && isset($_POST['telephone']) && isset($_POST['adresse']) && isset($_POST['cp']) && isset($_POST['mdp']) && isset($_POST['mdp2']) && isset($_POST['ville'])) {
 	#si tous les champs obligatoires contiennent une valeur
@@ -15,7 +18,11 @@ if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['date']) && 
 					if (verifAge($_POST['date'])) {
 							#bon format du mail
 						if (filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
-							$message = ajoutClient($_POST['nom'],$_POST['prenom'],$_POST['date'],$_POST['mail'],$_POST['telephone'],$_POST['adresse'],$_POST['cp'],$_POST['mdp'],$_POST['ville']);
+							if (!nonUniqueMail($_POST['mail'])) {
+								$message = ajoutClient($_POST['nom'],$_POST['prenom'],$_POST['date'],$_POST['mail'],$_POST['telephone'],$_POST['adresse'],$_POST['cp'],$_POST['mdp'],$_POST['ville']);
+							} else {
+								$message = 'Adresse mail déja utilisé';
+							}
 						} else {
 							$message = "Mail invalide";
 						}

@@ -90,7 +90,7 @@ function suppr_client($mail) //testé
     $effet->execute(array($mail));
 }
 
-suppr_client("aurelien@epsi.fr");
+ajout_client("Najare", "Aya", "2001-01-01", "fun@prout.com", '0107080905', "572 avenue du mal à la tête", "59126", "rose", "Joie");
 
 ?>
 

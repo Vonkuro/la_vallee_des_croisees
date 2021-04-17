@@ -4,6 +4,7 @@
         header('location: ../index.php');
     }
     include '../ConnexionBDD.php';
+    include './fonction_sql.php';
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
@@ -49,8 +50,8 @@
                     while($ligne = $effet->fetch()){
                         echo "<tr><td>" . $ligne['login_administrateur'] . "</td>";
                         echo "<td>" . $ligne['mdp_administrateur'] . "</td>";
-                        echo "<td><a href='./admin.php?montre=admin&fait=modif'>Modifier</a></td>";
-                        echo "<td><a href='./admin.php?montre=admin&fait=suppr'>Supprimer</a></td></tr>";
+                        echo "<td><a href='./admin.php?montre=admin&fait=modif&i=". $ligne['id'] ."'>Modifier</a></td>";
+                        echo "<td><a href='./admin.php?montre=admin&fait=suppr&i=". $ligne['id'] ."'>Supprimer</a></td></tr>"; 
                     }
                     echo "</table>";
                     break;
@@ -65,6 +66,25 @@
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
+                    break;
+
+                case "suppr":
+                    suppr_admin($_GET['i']);
+                    break;
+
+                case "modif":
+                    $effet = $conn->query('select * from Administrateur where id = '. $_GET['i'] . ';');
+                    $ligne = $effet->fetch();
+                    ?>
+                    <form action="./modif_admin.php" method="post">
+                        Login : <?php echo $ligne['login_administrateur']; ?><br><br>
+                        <label for="nom">Mot de Passe :</label>
+                        <input type="text" id="mdp" name="mdp" value= "<?php echo $ligne['mdp_administrateur']; ?>" ><br><br>
+                        <input type="hidden" name="id" value="<?php echo $_GET['i'];?>">
+                        <input type="submit" value="Envoyer">
+                    </form>
+                    <?php
+                    
                     break;
             }
             break;

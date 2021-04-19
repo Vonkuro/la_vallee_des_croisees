@@ -116,5 +116,17 @@ function modif_semaine($numero, $date_d, $date_f, $annee, $saison, $id)
     $effet->execute(array($numero, $date_d, $date_f, $annee, $saison, $id));
 }
 
+
+
+function date_futur($date_string)
+{
+    $date_time = new DateTime($date_string);
+    $date_now = new DateTime("now");
+    if ($date_now <= $date_time) {
+        return TRUE;
+    }
+    return FALSE;
+}
+
 ?>
 

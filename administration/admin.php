@@ -203,6 +203,26 @@
         case "chalet": 
             switch ((isset($_GET['fait']) ? $_GET['fait'] : "lire")){
                 case "lire":
+                    ?>
+                    <table>
+                        <tr>
+                            <td>Type</td>
+                            <td>Nombre de Place</td>
+                            <td>Prix</td>
+                            <td></td>
+                        </tr>
+                    <?php
+                    global $conn;
+                    $effet = $conn->query("select * from type_chalet;");
+                    while($ligne = $effet->fetch()){
+                        echo "<tr><td>" . $ligne["libelle"] . "</td>";
+                        echo "<td>" . $ligne["nb_place"] . "</td>";
+                        echo "<td>" . $ligne["prix_base"] . "</td>";
+                        echo "<td><a href='./admin.php?montre=type&fait=modif&i=". $ligne['id_type_chalet'] ."'>Modifier</a></td></tr>";
+                        
+                    }
+                    echo "</table>";
+
                     echo "<a href='./admin.php?montre=chalet&fait=ajout'>Ajouter</a>";
                     ?>
                     <table>
@@ -215,17 +235,48 @@
                             <td></td>
                         </tr>
                     <?php
-                    /*
-                    global $conn;
-                    $list_Id_Chalet = [];
-                    $effet = $conn->query('select Chalet.id_chalet, libelle, prix_base from Chalet, type_chalet where Chalet.id_chalet = type_chalet.id_chalet ;');
+                    
+                    $taux_sql = $conn->query('select taux from Semaine, Saison where Semaine.id_saison = Saison.id_saison and date_debut <= GETDATE() and date_fin >= GETDATE();');
+                    if ($taux_sql->rowCount() != 0){
+                        $taux = $taux_sql->fetch();
+                    }else{
+                        $taux=1;
+                    }
+
+                    $effet = $conn->query('select Chalet.id_chalet, libelle, prix_base from Chalet, type_chalet where Chalet.id_type_chalet = type_chalet.id_type_chalet ;');
                     while($ligne = $effet->fetch()){
                         echo "<tr><td>" . $ligne['id_chalet'] . "</td>";
                         echo "<td>" . $ligne['libelle'] . "</td>";
-                        $prix_sql = 'select prix_modifie, taux from  ;'
-                        echo "<td><a href='./admin.php?montre=client&fait=modif&i=". $ligne['id_client'] ."'>Modifier</a></td>";
-                        echo "<td><a href='./admin.php?montre=client&fait=suppr&i=". $ligne['id_client'] ."'>Supprimer</a></td>";
-                    }*/
+
+                        $prix_spe_sql = 'select prix_modifie from Semaine, prix_special where id_chalet = ? and prix_special.id_semaine = Semaine.id_semaine and date_debut <= GETDATE() and date_fin >= GETDATE();';
+                        $prix_spe = $conn->prepare($prix_spe_sql);
+                        $prix_spe->execute(array($ligne['id_chalet']));
+                        if ($prix_spe->rowCount() != 0){
+                            $prix_spe_resultat = $prix_spe->fetch();
+                            $prix = $ligne['prix_base'] + $prix_spe_resultat['prix_modifie'];
+                        }else{
+                            $prix = $ligne['prix_base'];
+                        }
+
+                        echo "<td>" . $prix . "</td>";
+
+                        $reserv_sql = "select valide from Reservation, Semaine where id_chalet = ? and Reservation.id_semaine = Semaine.id_semaine and date_debut <= GETDATE() and date_fin >= GETDATE();";
+                        $reserv = $conn->prepare($reserv_sql);
+                        $reserv->execute(array($ligne['id_chalet']));
+                        if ($reserv->rowCount() != 0){
+                            $etat = $reserv->$fetch();
+                            if ($etat){
+                                echo "<td>Réservé cette Semaine</td>";
+                            }else{
+                                echo "<td>Non reservé</td>";
+                            }
+                        }else{
+                            echo "<td>Non reservé</td>";
+                        }
+
+                        echo "<td><a href='./admin.php?montre=chalet&fait=modif&i=". $ligne['id_chalet'] ."'>Modifier</a></td>";
+                        echo "<td><a href='./admin.php?montre=chalet&fait=suppr&i=". $ligne['id_chalet'] ."'>Supprimer</a></td></tr>";
+                    }
                 break;
             }
             break;

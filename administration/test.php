@@ -6,7 +6,7 @@
 <body>
     <form action="./verif_login.php" method="get">
         <input type="hidden" name="log" value="Robert">
-        <input type="hidden" name="mdp" value="Verte">
+        <input type="hidden" name="mdp" value="Vert">
         <input type="submit" value="Envoyer">
     </form>
 </body>

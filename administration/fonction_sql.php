@@ -92,5 +92,21 @@ function suppr_client($mail) //testé
 
 //ajout_client("Najare", "Aya", "2001-01-01", "fun@prout.com", '0107080905', "572 avenue du mal à la tête", "59126", "rose", "Joie");
 
+function ajout_semaine($numero, $date_d, $date_f, $annee, $saison)//testé
+{
+    global $conn;
+    $requette = "insert into Semaine(numero_semaine, date_debut, date_fin, annee, id_saison) values (?, ?, ?, ?, ?);";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($numero, $date_d, $date_f, $annee, $saison));
+}
+
+function suppr_semaine($id) //testé
+{
+    global $conn;
+    $requette="DELETE Semaine where id_semaine = ?;";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($id));
+}
+
 ?>
 

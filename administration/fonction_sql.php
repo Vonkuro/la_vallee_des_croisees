@@ -108,5 +108,13 @@ function suppr_semaine($id) //testé
     $effet->execute(array($id));
 }
 
+function modif_semaine($numero, $date_d, $date_f, $annee, $saison, $id)
+{
+    global $conn;
+    $requette = "Update Semaine set numero_semaine = ? , date_debut = ?, date_fin = ? , annee = ?, id_saison = ? where id_semaine = ?;";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($numero, $date_d, $date_f, $annee, $saison, $id));
+}
+
 ?>
 

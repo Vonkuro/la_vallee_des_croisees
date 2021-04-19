@@ -23,7 +23,7 @@
             <td><a href="./admin.php?montre=admin">Administrateurs</a></td>
             <td><a href="./admin.php?montre=client">Clients</a></td>
             <td><a href="./admin.php?montre=chalet">Mobil-Home</a></td>
-            <td><a href="./admin.php?montre=semmaine">Semmaines</a></td>
+            <td><a href="./admin.php?montre=semmaine">Semaines</a></td>
             <td><a href="./admin.php?montre=reserv">Réservation</a></td>
         </tr>
     </table>
@@ -247,7 +247,7 @@
                         </tr>
                     <?php
                     global $conn;
-                    $effet = $conn->query('select id_semaine, numero_semaine, date_debut, date_fin, annee, type from Semaine, Saison where Semaine.id_saison = Saison.id_saison;');
+                    $effet = $conn->query('select id_semaine, numero_semaine, date_debut, date_fin, annee, type from Semaine, Saison where Semaine.id_saison = Saison.id_saison order by numero_semaine;');
                     while($ligne = $effet->fetch()){
                         echo "<tr><td>" . $ligne['numero_semaine'] . "</td>";
                         echo "<td>" . $ligne['date_debut'] . "</td>";
@@ -311,6 +311,8 @@
 
                         <label for="annee">Année :</label>
                         <input type="text" id="annee" name="annee" value = <?php echo $ligne["annee"]; ?>><br><br>
+
+                        <input type="hidden" id="id" name="id" value="<?php echo $_GET['i'];?>" >
 
                         <input type="submit" value="Envoyer">
                     </form>

@@ -1,4 +1,4 @@
 <?php
+    echo "Page statique";
 
-
->?
+?>

@@ -48,7 +48,7 @@ function modif_admin($id,$mdp) //testé
 function ajout_chalet($type) //testé
 {
     global $conn;
-    $requette ="select id_type_chalet from type_chalet where libelle = ?;";
+    $requette ="select id_type_chalet from type_chalet where id_type_chalet = ?;";
     $effet = $conn->prepare($requette);
     $effet->execute(array($type));
     $ligne =$effet->fetch();
@@ -126,6 +126,24 @@ function date_futur($date_string)
         return TRUE;
     }
     return FALSE;
+}
+
+function modif_prix($id_chalet, $id_semaine, $prix)
+{
+    global $conn;
+    $requette = "select prix_modifie from prix_special where id_chalet = ? and id_semaine = ? ;";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($id_chalet, $id_semaine));
+    //$ligne = $effet->fetch();
+    if ($effet->rowCount() != 0){
+        $requette = "update prix_special set prix_modifie = ? where id_chalet = ? and id_semaine = ? ;";
+        $effet = $conn->prepare($requette);
+        $effet->execute(array($prix, $id_chalet, $id_semaine));
+    }else{
+        $requette = "insert into prix_special(prix_modifie,id_chalet,id_semaine) values(?,?,?);";
+        $effet = $conn->prepare($requette);
+        $effet->execute(array($prix, $id_chalet, $id_semaine));
+    }
 }
 
 ?>

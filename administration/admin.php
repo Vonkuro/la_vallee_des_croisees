@@ -238,7 +238,8 @@
                     
                     $taux_sql = $conn->query('select taux from Semaine, Saison where Semaine.id_saison = Saison.id_saison and date_debut <= GETDATE() and date_fin >= GETDATE();');
                     if ($taux_sql->rowCount() != 0){
-                        $taux = $taux_sql->fetch();
+                        $taux_resultat = $taux_sql->fetch();
+                        $taux = $taux_resultat['taux'];
                     }else{
                         $taux=1;
                     }
@@ -257,7 +258,7 @@
                         }else{
                             $prix = $ligne['prix_base'];
                         }
-
+                        $prix = $prix * $taux;
                         echo "<td>" . $prix . "</td>";
 
                         $reserv_sql = "select valide from Reservation, Semaine where id_chalet = ? and Reservation.id_semaine = Semaine.id_semaine and date_debut <= GETDATE() and date_fin >= GETDATE();";
@@ -277,6 +278,56 @@
                         echo "<td><a href='./admin.php?montre=chalet&fait=modif&i=". $ligne['id_chalet'] ."'>Modifier</a></td>";
                         echo "<td><a href='./admin.php?montre=chalet&fait=suppr&i=". $ligne['id_chalet'] ."'>Supprimer</a></td></tr>";
                     }
+                break;
+            case "ajout":
+                ?>
+                    <form action="./add_chalet.php" method="post">
+                        <label for="type">Type :</label>
+                        <select name ="type">
+                        <?php
+                        global $conn;
+                        $effet = $conn->query("select * from type_chalet;");
+                        while($ligne = $effet->fetch()){
+                            echo '<option value="'.$ligne['id_type_chalet'].'">'.$ligne['libelle'].'</option>';
+                        }
+                        ?>
+                        </select><br><br>
+
+                        <input type="submit" value="Envoyer">
+                    </form>
+                <?php
+                break;
+
+            case "suppr":
+                suppr_chalet($_GET['i']);
+                break;
+                
+            case "modif":
+                echo 'Modification du prix du chalet '. $_GET['i'].' : ';
+                ?>
+                    <table>
+                        <tr>
+                            <td>Date Début</td>
+                            <td>Date Fin</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    <?php
+                    global $conn;
+                    $requette = 'select Semaine.id_semaine, numero_semaine, date_debut, date_fin, prix_modifie from Semaine left join (select prix_modifie, id_semaine from prix_special  where id_chalet = ?) as prix on Semaine.id_semaine = prix.id_semaine order by numero_semaine;';
+                    $effet = $conn->prepare($requette);
+                    $effet->execute(array($_GET['i']));
+                    while($ligne = $effet->fetch()){
+                        echo "<tr><td>" . $ligne['date_debut'] . "</td>";
+                        echo "<td>" . $ligne['date_fin'] . "</td>";
+                        echo '<form action="./modif_chalet.php" method="post">';
+                        echo '<td> <input type="number" id="prix" name="prix" value= ' . $ligne['prix_modifie'] .' > </td>';
+                        echo '<input type="hidden" id="id_semaine" name="id_semaine" value="'.$ligne['id_semaine'].'">';
+                        echo '<input type="hidden" id="id_chalet" name="id_chalet" value="'.$_GET['i'].'">';
+                        echo '<td> <input type="submit" value="Envoyer"> </td>';
+                        echo '</form></tr>';
+                     }
+                    break;
                 break;
             }
             break;

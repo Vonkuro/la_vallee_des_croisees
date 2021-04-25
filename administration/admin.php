@@ -309,7 +309,7 @@
                         <tr>
                             <td>Date Début</td>
                             <td>Date Fin</td>
-                            <td></td>
+                            <td>Modification du Prix</td>
                             <td></td>
                         </tr>
                     <?php
@@ -357,7 +357,7 @@
                         echo "<td>" . $ligne['type'] . "</td>";
                         echo "<td>" . $ligne['annee'] . "</td>";
                         echo "<td><a href='./admin.php?montre=semmaine&fait=modif&i=". $ligne['id_semaine'] ."'>Modifier</a></td>";
-                        echo "<td><a href='./admin.php?montre=semmaine&fait=suppr&i=". $ligne['id_semaine'] ."'>Supprimer</a></td>";
+                        echo "<td><a href='./admin.php?montre=semmaine&fait=suppr&i=". $ligne['id_semaine'] ."'>Supprimer</a></td></tr>";
                      }
                     break;
                 case "ajout":
@@ -420,7 +420,80 @@
                     </form>
                     <?php
                     break;
-                
+
+        
+            }
+            break;
+        case "reserv":
+            switch ((isset($_GET['fait']) ? $_GET['fait'] : "lire")){
+                case "lire":
+                    echo "<a href='./admin.php?montre=reserv&fait=ajout'>Ajouter</a>";
+                    ?>
+                    <table>
+                        <tr>
+                            <td>Date du Début</td>
+                            <td>Etat de la reservation</td>
+                            <td>Nom du Client</td>
+                            <td>Prenom du Client</td>
+                            <td>Mobil-Home</td>
+                            <td></td>
+                        </tr>
+                    <?php
+                    global $conn;
+                    $effet = $conn->query('select valide , id_chalet, nom, prenom, date_debut, Reservation.id_client, Reservation.id_semaine from Reservation, Semaine, Client where Reservation.id_client = Client.id_client and Reservation.id_semaine = Semaine.id_semaine ;');
+                    while($ligne = $effet->fetch()){
+                        echo "<tr><td>" . $ligne['date_debut'] . "</td>";
+                        echo "<td>" . $ligne['valide'] . "</td>";
+                        echo "<td>" . $ligne['nom'] . "</td>";
+                        echo "<td>" . $ligne['prenom'] . "</td>";
+                        echo "<td>" . $ligne['id_chalet'] . "</td>";
+                        echo "<td><a href='./admin.php?montre=reserv&fait=suppr&ch=". $ligne['id_chalet'] ."&cl=". $ligne['id_client'] ."&se=". $ligne['id_semaine'] ."'>Supprimer</a></td></tr>";
+                    }
+                    break;
+                case "ajout":
+                    // Informations: -un select client(Nom, Prenom, mail) -un select chalet(id, type) -un select semaine(date début)
+                    global $conn;
+                    $clients = $conn->query("select id_client, nom, prenom, mail from Client;");
+                    $chalets = $conn->query("select id_chalet, libelle from Chalet, type_chalet where Chalet.id_type_chalet = type_chalet.id_type_chalet;");
+                    $semaines = $conn->query("select id_semaine, date_debut from Semaine;");
+                    $date_now = new DateTime("now");
+                    $today_string = $date_now->format("Y-m-d");
+                    ?>
+                    <form action="./add_reservation.php" method="post">
+                        <label for="chalet">Chalet :</label>
+                        <select id="chalet" name="chalet">
+                            <?php 
+                            while($ligne = $chalets->fetch()){
+                                echo '<option value="'.$ligne['id_chalet'].'"> '.$ligne['id_chalet'].' '.$ligne['libelle'].' </option>';
+                            }
+                            ?>
+                        </select><br><br>
+
+                        <label for="client">Client :</label>
+                        <select id="client" name="client">
+                            <?php 
+                            while($ligne = $clients->fetch()){
+                                echo '<option value="'.$ligne['id_client'].'"> '.$ligne['nom'].' '.$ligne['prenom'].' '.$ligne['mail'].' </option>';
+                            }
+                            ?>
+                        </select><br><br>
+                        <label for="semaine">Date du Début de la Reservation :</label>
+                        <select id="semaine" name="semaine">
+                            <?php 
+                            while($ligne = $semaines->fetch()){
+                                echo '<option value="'.$ligne['id_semaine'].'"> '.$ligne['date_debut'].' </option>';
+                            }
+                            ?>
+                        </select><br><br>
+                        <input type="hidden" id="date" name="date" value="<?php echo $today_string;?>" >
+                        <input type="submit" value="Envoyer">
+                    </form>
+                    <?php
+                    
+                    break;
+                case "suppr":
+                    suppr_reservation($_GET['cl'],$_GET['ch'],$_GET['se']);
+                    break;
             }
             break;
                 

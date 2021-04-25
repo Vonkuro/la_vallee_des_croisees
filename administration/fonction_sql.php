@@ -108,7 +108,7 @@ function suppr_semaine($id) //testé
     $effet->execute(array($id));
 }
 
-function modif_semaine($numero, $date_d, $date_f, $annee, $saison, $id)
+function modif_semaine($numero, $date_d, $date_f, $annee, $saison, $id) //testé
 {
     global $conn;
     $requette = "Update Semaine set numero_semaine = ? , date_debut = ?, date_fin = ? , annee = ?, id_saison = ? where id_semaine = ?;";
@@ -118,7 +118,7 @@ function modif_semaine($numero, $date_d, $date_f, $annee, $saison, $id)
 
 
 
-function date_futur($date_string)
+function date_futur($date_string) //testé
 {
     $date_time = new DateTime($date_string);
     $date_now = new DateTime("now");
@@ -128,7 +128,7 @@ function date_futur($date_string)
     return FALSE;
 }
 
-function modif_prix($id_chalet, $id_semaine, $prix)
+function modif_prix($id_chalet, $id_semaine, $prix) //testé
 {
     global $conn;
     $requette = "select prix_modifie from prix_special where id_chalet = ? and id_semaine = ? ;";
@@ -144,6 +144,23 @@ function modif_prix($id_chalet, $id_semaine, $prix)
         $effet = $conn->prepare($requette);
         $effet->execute(array($prix, $id_chalet, $id_semaine));
     }
+}
+
+
+function ajout_reservation($id_client, $id_chalet, $id_semaine, $today) //testé
+{
+    global $conn;
+    $requette = "insert into Reservation(id_client, id_chalet, id_semaine, date_reservation) values (?, ?, ?, ?);";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($id_client, $id_chalet, $id_semaine, $today));
+}
+
+function suppr_reservation($id_client, $id_chalet, $id_semaine)
+{
+    global $conn;
+    $requette="DELETE Reservation where id_client = ? and id_chalet = ? and id_semaine = ?;";
+    $effet = $conn->prepare($requette);
+    $effet->execute(array($id_client, $id_chalet, $id_semaine));
 }
 
 ?>

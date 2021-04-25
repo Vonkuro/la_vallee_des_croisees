@@ -1,25 +1,68 @@
 <?php
-//Fonction sql
+//Fonction sql : x fait et v idiotproof
 /* Les tableaux interactions :
     list des administrateur
-        ajout x
-        modification x
+        ajout  xv
+        modification xv
         suppression x
-        lire 
     liste des chalets
-        ajout x
+        ajout xv
         suppression x
-        lire
     liste des clients
+        ajout xv
+        modification xv
+        suppression x
+    liste des semaines
         ajout x
         modification x
         suppression x
-        lire
-    liste des semaines
     liste des reservation
+        ajout x
+        suppression x
     liste des prix_spéciaux par chalet par semaine
+        ajout et modification x
 */
 include '../ConnexionBDD.php';
+
+//régle des fonctions test : elle return True si la condition est respectée
+function test_string($string, $taille)//testé
+{
+    if(strlen($string)>0 and strlen($string) <= $taille){
+        return True;
+    }
+    return False;
+}
+
+function test_log_admin($log)//testé
+{
+    global $conn;
+    $effet = $conn->query('select login_administrateur from Administrateur');
+    $valide=True;
+    while($ligne = $effet->fetch())
+    {
+        if($ligne['login_administrateur'] == $log){
+            $valide=False;
+        }
+    }
+    return $valide;
+}
+
+function test_mail($mail) //testé
+{
+    if (filter_var($mail, FILTER_VALIDATE_EMAIL) and test_string($mail, 150)){
+        global $conn;
+        $effet = $conn->query('select mail from Client');
+        $valide=True;
+        while($ligne = $effet->fetch())
+        {
+            if($ligne['mail'] == $mail){
+                $valide=False;
+            }
+        }
+        return $valide;
+    }
+    return False;
+}
 
 function ajout_admin($login,$mdp) //testé (vérifié les log existant)
 {

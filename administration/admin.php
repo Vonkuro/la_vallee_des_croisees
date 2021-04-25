@@ -5,6 +5,11 @@
     }
     include '../ConnexionBDD.php';
     include './fonction_sql.php';
+    function message_erreur(){
+        if(isset($_POST['erreur'])){
+            echo $_POST['erreur'];
+        }
+    }
 ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
@@ -67,6 +72,7 @@
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
+                    message_erreur();
                     break;
 
                 case "suppr":
@@ -85,7 +91,7 @@
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
-                    
+                    message_erreur();
                     break;
             }
             break;
@@ -153,6 +159,7 @@
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
+                    message_erreur();
                     break;
                 case "suppr":
                     suppr_client($_GET['i']);
@@ -179,6 +186,7 @@
 
                         Mail : <?php echo $ligne['mail']; ?><br><br>
                         <input type="hidden" id="mail" name="mail" value= "<?php echo $ligne['mail']; ?>" >
+                        <input type="hidden" id="id_client" name="id_client" value= "<?php echo $ligne['id_client']; ?>" >
 
                         <label for="adresse">Adresse :</label>
                         <input type="text" id="adresse" name="adresse" value= "<?php echo $ligne['adresse']; ?>" required><br><br>
@@ -195,7 +203,7 @@
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
-                        
+                    message_erreur();
                     break;
             }  
             break;

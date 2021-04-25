@@ -61,9 +61,9 @@
                     ?>
                     <form action="./add_admin.php" method="post">
                         <label for="log">Login :</label>
-                        <input type="text" id="log" name="log"><br><br>
+                        <input type="text" id="log" name="log" required><br><br>
                         <label for="mdp">Mot de Passe :</label>
-                        <input type="text" id="mdp" name="mdp"><br><br>
+                        <input type="text" id="mdp" name="mdp" required><br><br>
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
@@ -80,7 +80,7 @@
                     <form action="./modif_admin.php" method="post">
                         Login : <?php echo $ligne['login_administrateur']; ?><br><br>
                         <label for="nom">Mot de Passe :</label>
-                        <input type="text" id="mdp" name="mdp" value= "<?php echo $ligne['mdp_administrateur']; ?>" ><br><br>
+                        <input type="text" id="mdp" name="mdp" value= "<?php echo $ligne['mdp_administrateur']; ?>" required><br><br>
                         <input type="hidden" name="id" value="<?php echo $_GET['i'];?>">
                         <input type="submit" value="Envoyer">
                     </form>
@@ -125,31 +125,31 @@
                     ?>
                     <form action="./add_client.php" method="post">
                         <label for="nom">Nom :</label>
-                        <input type="text" id="nom" name="nom"><br><br>
+                        <input type="text" id="nom" name="nom" required><br><br>
 
                         <label for="prenom">Prenom :</label>
-                        <input type="text" id="prenom" name="prenom"><br><br>
+                        <input type="text" id="prenom" name="prenom" required><br><br>
 
                         <label for="date">Date de Naissance :</label>
-                        <input type="date" id="date" name="date"><br><br>
+                        <input type="date" id="date" name="date" required><br><br>
 
                         <label for="tel">Telephone :</label>
-                        <input type="text" id="tel" name="tel"><br><br>
+                        <input type="text" id="tel" name="tel" required><br><br>
 
                         <label for="adresse">Adresse :</label>
-                        <input type="text" id="adresse" name="adresse"><br><br>
+                        <input type="text" id="adresse" name="adresse" required><br><br>
 
                         <label for="cp">Code Postal :</label>
-                        <input type="text" id="cp" name="cp"><br><br>
+                        <input type="text" id="cp" name="cp" required><br><br>
 
                         <label for="ville">Ville :</label>
-                        <input type="text" id="ville" name="ville"><br><br>
+                        <input type="text" id="ville" name="ville" required><br><br>
 
                         <label for="mail">Mail :</label>
-                        <input type="text" id="mail" name="mail"><br><br>
+                        <input type="text" id="mail" name="mail" required><br><br>
 
                         <label for="mdp">Mot de Passe :</label>
-                        <input type="text" id="mdp" name="mdp"><br><br>
+                        <input type="text" id="mdp" name="mdp" required><br><br>
                         <input type="submit" value="Envoyer">
                     </form>
                     <?php
@@ -166,31 +166,31 @@
                         
 
                         <label for="nom">Nom :</label>
-                        <input type="text" id="nom" name="nom" value= "<?php echo $ligne['nom']; ?>" ><br><br>
+                        <input type="text" id="nom" name="nom" value= "<?php echo $ligne['nom']; ?>" required><br><br>
 
                         <label for="prenom">Prenom :</label>
-                        <input type="text" id="prenom" name="prenom" value= "<?php echo $ligne['prenom']; ?>" ><br><br>
+                        <input type="text" id="prenom" name="prenom" value= "<?php echo $ligne['prenom']; ?>" required><br><br>
 
                         <label for="date">Date de Naissance:</label>
-                        <input type="date" id="date" name="date" value= "<?php echo $ligne['date_naissance']; ?>" ><br><br>
+                        <input type="date" id="date" name="date" value= "<?php echo $ligne['date_naissance']; ?>" required><br><br>
 
                         <label for="telephone">Telephone :</label>
-                        <input type="text" id="telephone" name="telephone" value= "<?php echo $ligne['telephone']; ?>" ><br><br>
+                        <input type="text" id="telephone" name="telephone" value= "<?php echo $ligne['telephone']; ?>" required><br><br>
 
                         Mail : <?php echo $ligne['mail']; ?><br><br>
                         <input type="hidden" id="mail" name="mail" value= "<?php echo $ligne['mail']; ?>" >
 
                         <label for="adresse">Adresse :</label>
-                        <input type="text" id="adresse" name="adresse" value= "<?php echo $ligne['adresse']; ?>" ><br><br>
+                        <input type="text" id="adresse" name="adresse" value= "<?php echo $ligne['adresse']; ?>" required><br><br>
 
                         <label for="ville">Ville :</label>
-                        <input type="text" id="ville" name="ville" value= "<?php echo $ligne['ville']; ?>" ><br><br>
+                        <input type="text" id="ville" name="ville" value= "<?php echo $ligne['ville']; ?>" required><br><br>
 
                         <label for="cp">Code Postal :</label>
-                        <input type="text" id="cp" name="cp" value= "<?php echo $ligne['cp_ville']; ?>" ><br><br>
+                        <input type="text" id="cp" name="cp" value= "<?php echo $ligne['cp_ville']; ?>" required><br><br>
 
                         <label for="nom">Mot de Passe :</label>
-                        <input type="text" id="mdp" name="mdp" value= "<?php echo $ligne['mdp_client']; ?>" ><br><br>
+                        <input type="text" id="mdp" name="mdp" value= "<?php echo $ligne['mdp_client']; ?>" required><br><br>
                         
                         <input type="submit" value="Envoyer">
                     </form>
@@ -321,7 +321,7 @@
                         echo "<tr><td>" . $ligne['date_debut'] . "</td>";
                         echo "<td>" . $ligne['date_fin'] . "</td>";
                         echo '<form action="./modif_chalet.php" method="post">';
-                        echo '<td> <input type="number" id="prix" name="prix" value= ' . $ligne['prix_modifie'] .' > </td>';
+                        echo '<td> <input type="number" id="prix" name="prix" value= ' . $ligne['prix_modifie'] .' required> </td>';
                         echo '<input type="hidden" id="id_semaine" name="id_semaine" value="'.$ligne['id_semaine'].'">';
                         echo '<input type="hidden" id="id_chalet" name="id_chalet" value="'.$_GET['i'].'">';
                         echo '<td> <input type="submit" value="Envoyer"> </td>';
@@ -364,13 +364,13 @@
                     ?>
                     <form action="./add_semaine.php" method="post">
                         <label for="numero">Numéro :</label>
-                        <input type="text" id="numero" name="numero"><br><br>
+                        <input type="text" id="numero" name="numero" required><br><br>
 
                         <label for="date_d">Date Début :</label>
-                        <input type="date" id="date_d" name="date_d"><br><br>
+                        <input type="date" id="date_d" name="date_d" required><br><br>
 
                         <label for="date_f">Date Fin :</label>
-                        <input type="date" id="date_f" name="date_f"><br><br>
+                        <input type="date" id="date_f" name="date_f" required><br><br>
 
                         <label for="saison">Saison :</label><?php //faire une requête ici si saison dynamique ?>
                         <select id="saison" name="saison">
@@ -380,7 +380,7 @@
                         </select><br><br>
 
                         <label for="annee">Année :</label>
-                        <input type="text" id="annee" name="annee"><br><br>
+                        <input type="text" id="annee" name="annee" required><br><br>
 
                         <input type="submit" value="Envoyer">
                     </form>
@@ -396,13 +396,13 @@
                     ?>
                     <form action="./modif_semaine.php" method="post">
                         <label for="numero">Numéro :</label>
-                        <input type="text" id="numero" name="numero" value = <?php echo $ligne["numero_semaine"]; ?>><br><br>
+                        <input type="text" id="numero" name="numero" value = <?php echo $ligne["numero_semaine"]; ?> required><br><br>
 
                         <label for="date_d">Date Début :</label>
-                        <input type="date" id="date_d" name="date_d" value = <?php echo $ligne["date_debut"]; ?>><br><br>
+                        <input type="date" id="date_d" name="date_d" value = <?php echo $ligne["date_debut"]; ?> required><br><br>
 
                         <label for="date_f">Date Fin :</label>
-                        <input type="date" id="date_f" name="date_f" value = <?php echo $ligne["date_fin"]; ?>><br><br>
+                        <input type="date" id="date_f" name="date_f" value = <?php echo $ligne["date_fin"]; ?> required><br><br>
 
                         <label for="saison">Saison :</label><?php //faire une requête ici si saison dynamique ?>
                         <select id="saison" name="saison" value="selectionner à nouveau la saison">
@@ -412,7 +412,7 @@
                         </select><br><br>
 
                         <label for="annee">Année :</label>
-                        <input type="text" id="annee" name="annee" value = <?php echo $ligne["annee"]; ?>><br><br>
+                        <input type="text" id="annee" name="annee" value = <?php echo $ligne["annee"]; ?> required><br><br>
 
                         <input type="hidden" id="id" name="id" value="<?php echo $_GET['i'];?>" >
 

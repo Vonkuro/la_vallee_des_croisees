@@ -13,14 +13,14 @@
         modification xv
         suppression x
     liste des semaines
-        ajout x
-        modification x
+        ajout xv
+        modification xv
         suppression x
     liste des reservation
-        ajout x
-        suppression x
+        ajout xv
+        suppression xv
     liste des prix_spéciaux par chalet par semaine
-        ajout et modification x
+        ajout et modification xv
 */
 include '../ConnexionBDD.php';
 

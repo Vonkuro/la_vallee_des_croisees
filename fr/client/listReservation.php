@@ -1,6 +1,9 @@
 <?php
 session_start();
 require('./fonctions.php');
+if (!isset($_SESSION['mail'])) {
+  header('Location:../connexion.php');
+}
 ?>
 
 <!DOCTYPE html>

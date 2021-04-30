@@ -1,7 +1,7 @@
 <?php
 
 function ajoutClient($nom,$prenom,$date_naissance,$mail,$telephone,$adresse,$cp_ville,$mdp_client,$ville) {
-		include('../connexionBDD.php');
+		global $conn;
 		$sql = "INSERT INTO Client (nom, prenom, date_naissance, mail, telephone, adresse, cp_ville, mdp_client, ville) VALUES (?,?,?,?,?,?,?,?,?)";
 		$resultat = $conn->prepare($sql);
 		$resultat->execute(array($nom, $prenom, $date_naissance, $mail, $telephone, $adresse, $cp_ville, $mdp_client,$ville));
@@ -15,7 +15,7 @@ function ajoutClient($nom,$prenom,$date_naissance,$mail,$telephone,$adresse,$cp_
 	}
 
 function nonUniqueMail($mail) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT * FROM Client WHERE mail=?";
 	$resultat=$conn->prepare($sql);
 	$resultat->execute(array($mail));
@@ -39,7 +39,7 @@ function verifAge($date) {
 }
 
 function ajoutReservation($mailClient, $idChalet, $idSemaine) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT id_client FROM Client WHERE mail=?";
 	$resultatId= $conn->prepare($sql);
 	$resultatId->execute(array($mailClient));
@@ -56,7 +56,7 @@ function ajoutReservation($mailClient, $idChalet, $idSemaine) {
 
 
 function prix_total($idChalet,$idSemaine) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT (type_chalet.prix_base+Prix_special.prix_modifie)*Saison.taux as prix_total FROM type_chalet INNER JOIN chalet ON type_chalet.id_type_chalet=chalet.id_type_chalet INNER JOIN Prix_special ON Chalet.id_chalet=Prix_special.id_chalet INNER JOIN Semaine ON Prix_special.id_semaine=Semaine.id_semaine INNER JOIN Saison ON Semaine.id_saison=Saison.id_saison WHERE chalet.id_chalet=? AND Semaine.id_semaine=?";
 	$resultat = $conn ->prepare($sql);
 	$resultat->execute(array($idChalet,$idSemaine));
@@ -84,7 +84,7 @@ function prix_total($idChalet,$idSemaine) {
 }
 
 function listSemaine($date_debut,$date_fin) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT Semaine.date_debut, Semaine.date_fin, Semaine.id_semaine FROM Semaine INNER JOIN Saison ON Semaine.id_saison=Saison.id_saison WHERE  (Semaine.date_debut<=:date_debut1 AND Semaine.date_fin>=:date_fin1) OR (Semaine.date_debut<=:date_debut2 AND Semaine.date_fin>=:date_debut3) OR (Semaine.date_debut>=:date_debut4 AND Semaine.date_fin<=:date_fin2) OR (Semaine.date_debut<=:date_fin3 AND Semaine.date_fin>=:date_fin4)";
 	$resultat = $conn->prepare($sql);
 	$resultat->execute(array('date_debut1' => $date_debut, 'date_fin1' => $date_fin, 'date_debut2' => $date_debut, 'date_debut3' => $date_debut, 'date_debut4' => $date_debut,'date_fin2' => $date_fin, 'date_fin3' => $date_fin, 'date_fin4' => $date_fin));
@@ -97,7 +97,7 @@ function listSemaine($date_debut,$date_fin) {
 }
 
 function listChalet($nb_place) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT chalet.id_chalet, type_chalet.libelle, type_chalet.id_type_chalet FROM Chalet INNER JOIN type_chalet ON Chalet.id_type_chalet=type_chalet.id_type_chalet WHERE nb_place>=?";
 	$resultat = $conn->prepare($sql);
 	$resultat->execute(array($nb_place));
@@ -134,7 +134,7 @@ function descriptionChalet($idTypeChalet) {
 }
 
 function reservationdejafaite($mailClient, $idChalet, $idSemaine) {
-	include('../connexionBDD.php');
+	global $conn;
 
 	$sql = "SELECT id_client FROM Client WHERE mail=?";
 	$resultatId= $conn->prepare($sql);
@@ -157,7 +157,7 @@ function reservationdejafaite($mailClient, $idChalet, $idSemaine) {
 }
 
 function chaletReserve($idChalet, $idSemaine) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT * FROM Reservation WHERE id_chalet= ? AND id_semaine=?";
 	$resultat=$conn->prepare($sql);
 	$resultat->execute(array($idChalet, $idSemaine));
@@ -195,7 +195,7 @@ function etatChalet($mail_client, $idChalet, $idSemaine,$voir) {
 }
 
 function listReservation($mail) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "SELECT id_client FROM Client WHERE mail=?";
 	$resultat= $conn->prepare($sql);
 	$resultat->execute(array($mail));
@@ -207,14 +207,14 @@ function listReservation($mail) {
 }
 
 function supprimeReservation($chalet, $semaine) {
-	include('../connexionBDD.php');
+	global $conn;
 	$sql = "DELETE FROM Reservation WHERE id_chalet=? AND id_semaine=?";
 	$resultat= $conn->prepare($sql);
 	$resultat->execute(array($chalet,$semaine));
 }
 
 function prenom($mail) {
-	include('../connexionBDD.php');	
+	global $conn;	
 	$sql ="SELECT prenom FROM Client WHERE mail=?";
 	$resultat= $conn->prepare($sql);
 	$resultat->execute(array($mail));

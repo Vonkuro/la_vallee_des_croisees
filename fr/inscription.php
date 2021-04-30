@@ -41,6 +41,8 @@
 </head>
 <body> 
 <?php
+include('./connexionBDD.php');
+
 require('./client/fonctions.php');
 
 ## Inscription du client
@@ -82,9 +84,10 @@ if (isset($_POST['date']))
 #verification de l'adresse mail
 if (isset($_POST['mail'])) {
 	if (!empty($_POST['mail'])) {
-		if (strlen($_POST['mail']<=150)) {
+		if (strlen($_POST['mail'])<=150) {
+
 			if (filter_var($_POST['mail'], FILTER_VALIDATE_EMAIL)) {
-				if (!nonUniqueMail($_POST['mail'])) {
+				if (nonUniqueMail($_POST['mail'])) {
 					$mail=$_POST['mail'];
 				} else {
 					die("ce mail est déjà utilisé");
@@ -93,6 +96,7 @@ if (isset($_POST['mail'])) {
 				die("mauvais format du mail");
 			}
 		} else {
+                        echo var_dump(strlen($_POST['mail']));
 			die("le mail est trop grand, taille invalide");
 		}
 	} else {
@@ -142,6 +146,7 @@ if (isset($_POST['mdp']) && isset($_POST['mdp2'])) {
 	} else {
 		die("le mot de passe est obligatoire");
 	}
+} else {
 }
 
 #verification de la ville
@@ -189,7 +194,7 @@ if (isset($_POST['ville'])) {
         </div>
         <div class="formulaire">
             <label for="password">mot de passe:</label>
-            <input type="password" name="mdp1" id="password" required>
+            <input type="password" name="mdp" id="password" required>
         </div>
         <div class="formulaire">
             <label for="password">confirmation mot de passe:</label>
@@ -209,8 +214,10 @@ if (isset($_POST['ville'])) {
         </div>
 
         <div style="margin-top:1cm;">
-            <input type="submit" value="S'inscrire">
+            <input type="submit" value="S'inscrire"> 
+
         </div>
+    <p><?php if (isset($message)) { echo $message;} ?></p> 
         <div style="margin-top:1cm;">
             <input type="button" onclick="window.location.href = './connexion.php';" value="Se connecter">
         </div>

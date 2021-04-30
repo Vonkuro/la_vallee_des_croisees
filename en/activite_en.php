@@ -55,13 +55,12 @@
         <a href="./index_en.php" class="list-group-item list-group-item-action bg-light">Home page</a>
         <a href="./destination_en.php" class="list-group-item list-group-item-action bg-light">Destinations</a>
         <a href="./activite_en.php" class="list-group-item list-group-item-action bg-light">Activities</a>
-        <a href="../fr/reservation.php" class="list-group-item list-group-item-action bg-light">Booking</a>
-        <a href="../fr/reservation.php" class="list-group-item list-group-item-action bg-light">My reservations</a>
+        <a href="../fr/client/rechercheReservation.php" class="list-group-item list-group-item-action bg-light">Booking</a>
+        <a href="../fr/client/listReservation.php" class="list-group-item list-group-item-action bg-light">My reservations</a>
         <a href="../fr/contacter.php" class="list-group-item list-group-item-action bg-light">Contact us</a>
         <div class="profile">
           <div class="div-divider" style="border-top: 3px solid black; text-align: center;"></div>
-          <img src="../images/images.png" alt="ma photo de Profile" style="width:60%">
-          <p>Account name</p>
+          <p>Disconnected</p>
           <a href="../fr/connexion.php" class="btn btn-outline-primary" role="button">Login</a>
         </div>
         <div id="langage" style="margin-top: 5%;">

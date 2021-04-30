@@ -1,6 +1,7 @@
 <?php
 session_start();
 require('./fonctions.php');
+include('../connexionBDD.php');
 if (!isset($_SESSION['mail'])) {
   header('Location:../connexion.php');
 }

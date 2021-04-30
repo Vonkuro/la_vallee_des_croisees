@@ -103,6 +103,12 @@ function ajout_chalet($type) //testé
 function suppr_chalet($id) //testé
 {
     global $conn;
+	$requette = "DELETE FROM Reservation WHERE id_chalet=?;";
+	$effet = $conn->prepare($requette);
+    $effet->execute(array($id));
+	$requette = "DELETE FROM Prix_special WHERE id_chalet=?;";
+	$effet = $conn->prepare($requette);
+    $effet->execute(array($id));
     $requette="DELETE from Chalet where id_chalet = ?;";
     $effet = $conn->prepare($requette);
     $effet->execute(array($id));
@@ -174,34 +180,20 @@ function date_futur($date_string) //testé
 function modif_prix($id_chalet, $id_semaine, $prix) //testé
 {
     global $conn;
-    #calcul du nouveau prix_modifie
-    $sql ="SELECT taux FROM Semaine INNER JOIN Saison ON Semaine.id_saison=Saison.id_saison WHERE id_semaine=?";
-    $resultat = $conn->prepare($sql);
-    $resultat->execute(array($id_semaine));
-    $donnee=$resultat->fetch();
-    $taux=$donnee['taux'];
-    $sql = "SELECT prix_base FROM Chalet INNER JOIN type_chalet ON Chalet.id_type_chalet=type_chalet.id_type_chalet WHERE id_chalet=?";
-    $resultat=$conn->prepare($sql);
-    $resultat->execute(array($id_chalet));
-    $donnee=$resultat->fetch();
-    $prix_base=$donnee['prix_base'];
-    $prixBD=$prix-$prix_base*$taux;
-
     #on veut savoir si un prix modifié a déjà été créé
     $requette = "select prix_modifie from prix_special where id_chalet = ? and id_semaine = ? ;";
     $effet = $conn->prepare($requette);
     $effet->execute(array($id_chalet, $id_semaine));
-    //$ligne = $effet->fetch();
 
     #modification dans la base de données
     if ($effet->rowCount() != 0){
         $requette = "update prix_special set prix_modifie = ? where id_chalet = ? and id_semaine = ? ;";
         $effet = $conn->prepare($requette);
-        $effet->execute(array($prixBD, $id_chalet, $id_semaine));
+        $effet->execute(array($prix, $id_chalet, $id_semaine));
     }else{
         $requette = "insert into prix_special(prix_modifie,id_chalet,id_semaine) values(?,?,?);";
         $effet = $conn->prepare($requette);
-        $effet->execute(array($prixBD, $id_chalet, $id_semaine));
+        $effet->execute(array($prix, $id_chalet, $id_semaine));
     }
 }
 
